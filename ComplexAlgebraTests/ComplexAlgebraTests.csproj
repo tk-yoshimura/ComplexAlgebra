@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="TYoshimura.Algebra" Version="2.1.9" />
+    <PackageReference Include="TYoshimura.DoubleDouble" Version="3.2.6" />
+    <PackageReference Include="TYoshimura.DoubleDouble.Complex" Version="1.4.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ComplexAlgebra">
+      <HintPath>..\ComplexAlgebra\bin\Debug\net8.0\ComplexAlgebra.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+</Project>

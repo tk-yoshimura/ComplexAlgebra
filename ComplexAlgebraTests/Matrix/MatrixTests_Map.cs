@@ -1,0 +1,69 @@
+﻿using Algebra;
+using ComplexAlgebra;
+using DoubleDoubleComplex;
+
+namespace ComplexAlgebraTests {
+    public partial class ComplexMatrixTests {
+        [TestMethod()]
+        public void FuncTest() {
+            ComplexMatrix matrix1 = new(new Complex[,] { { 1, 2, 4 }, { 8, 16, 32 } });
+            ComplexMatrix matrix2 = new(new Complex[,] { { 2, 3, 5 }, { 9, 17, 33 } });
+            ComplexMatrix matrix3 = new(new Complex[,] { { 3, 4, 6 }, { 10, 18, 34 } });
+            ComplexMatrix matrix4 = new(new Complex[,] { { 4, 5, 7 }, { 11, 19, 35 } });
+            ComplexMatrix matrix5 = new(new Complex[,] { { 5, 6, 8 }, { 12, 20, 36 }, { 2, 1, 0 } });
+
+            Assert.AreEqual(new ComplexMatrix(new Complex[,] { { 2, 4, 8 }, { 16, 32, 64 } }), (ComplexMatrix)(v => 2 * v, matrix1));
+            Assert.AreEqual(new ComplexMatrix(new Complex[,] { { 5, 8, 14 }, { 26, 50, 98 } }), (ComplexMatrix)((v1, v2) => v1 + 2 * v2, (matrix1, matrix2)));
+            Assert.AreEqual(new ComplexMatrix(new Complex[,] { { 17, 24, 38 }, { 66, 122, 234 } }), (ComplexMatrix)((v1, v2, v3) => v1 + 2 * v2 + 4 * v3, (matrix1, matrix2, matrix3)));
+            Assert.AreEqual(new ComplexMatrix(new Complex[,] { { 49, 64, 94 }, { 154, 274, 514 } }), (ComplexMatrix)((v1, v2, v3, v4) => v1 + 2 * v2 + 4 * v3 + 8 * v4, (matrix1, matrix2, matrix3, matrix4)));
+            Assert.AreEqual(new ComplexMatrix(new Complex[,] { { 49, 64, 94 }, { 154, 274, 514 } }), (ComplexMatrix)((v1, v2, v3, v4) => v1 + 2 * v2 + 4 * v3 + 8 * v4, (matrix1, matrix2, matrix3, matrix4)));
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2) => v1 + 2 * v2, matrix1, matrix5);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2) => v1 + 2 * v2, matrix5, matrix1);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2, v3) => v1 + 2 * v2 + 4 * v3, matrix1, matrix2, matrix5);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2, v3) => v1 + 2 * v2 + 4 * v3, matrix1, matrix5, matrix2);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2, v3) => v1 + 2 * v2 + 4 * v3, matrix5, matrix1, matrix2);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2, v3, v4) => v1 + 2 * v2 + 4 * v3 + 8 * v4, matrix1, matrix2, matrix3, matrix5);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2, v3, v4) => v1 + 2 * v2 + 4 * v3 + 8 * v4, matrix1, matrix2, matrix5, matrix3);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2, v3, v4) => v1 + 2 * v2 + 4 * v3 + 8 * v4, matrix1, matrix5, matrix2, matrix3);
+            });
+
+            Assert.ThrowsException<ArgumentException>(() => {
+                ComplexMatrix.Func((v1, v2, v3, v4) => v1 + 2 * v2 + 4 * v3 + 8 * v4, matrix5, matrix1, matrix2, matrix3);
+            });
+        }
+
+
+        [TestMethod()]
+        public void MapTest() {
+            Vector vector1 = new(1, 2, 4, 8);
+            Vector vector2 = new(2, 3, 5);
+
+            ComplexMatrix m = ((v1, v2) => v1 + v2, vector1, vector2);
+
+            Assert.AreEqual(new ComplexMatrix(new Complex[,] { { 3, 4, 6 }, { 4, 5, 7 }, { 6, 7, 9 }, { 10, 11, 13 } }), m);
+        }
+    }
+}
