@@ -1,4 +1,5 @@
-﻿using DoubleDoubleComplex;
+﻿using DoubleDouble;
+using DoubleDoubleComplex;
 
 namespace ComplexAlgebra {
     public partial class ComplexMatrix {
@@ -62,36 +63,23 @@ namespace ComplexAlgebra {
         private static void GramSchmidtMethod(List<ComplexVector> vs) {
             int n = vs[0].Dim;
 
-            ComplexVector g = ComplexVector.Fill(n, 1);
-            for (int i = 0; i < vs.Count; i++) {
-                g += vs[i];
+            List<ComplexVector> init_vecs = [];
+            for (int i = 0; i < n; i++) {
+                ComplexVector v = ComplexVector.Zero(n);
+                v[i] = 1;
+                init_vecs.Add(v);
             }
 
-            int g_sft = 0;
-
             while (vs.Count < n) {
+                ComplexVector g = init_vecs.OrderBy(u => vs.Select(v => ComplexVector.Dot(u, v).Norm).Sum()).First();
+
                 ComplexVector v = g;
-                bool is_success = true;
 
                 for (int i = 0; i < vs.Count; i++) {
-                    Complex dot = ComplexVector.Dot(g, vs[i]);
-
-                    // rare case: a vector existed that was orthogonal to the selected vector
-                    if (Complex.IsZero(dot) && !ComplexVector.IsZero(vs[i])) {
-                        g[g_sft % n] += 1;
-                        g_sft++;
-                        is_success = false;
-                    }
-
-                    v -= vs[i] * dot / vs[i].SquareNorm;
-                }
-
-                if (!is_success) {
-                    continue;
+                    v -= vs[i] * ComplexVector.Dot(g, vs[i]) / vs[i].SquareNorm;
                 }
 
                 v = v.Normal;
-                g += v;
 
                 vs.Add(v);
             }
