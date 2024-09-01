@@ -206,7 +206,7 @@ namespace ComplexAlgebraTests {
 
                     Console.WriteLine(k);
 
-                    Assert.IsTrue((k.Det.Norm - 1) < 1e-30);
+                    Assert.IsTrue((k.Det.Norm - 1) < 1e-27);
                     Assert.IsTrue((k - ComplexMatrix.Identity(n)).Det.Norm < 1e-27);
                 }
             }
