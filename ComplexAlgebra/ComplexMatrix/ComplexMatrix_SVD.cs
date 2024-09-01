@@ -74,7 +74,7 @@ namespace ComplexAlgebra {
                 bool is_success = true;
 
                 for (int i = 0; i < vs.Count; i++) {
-                    Complex dot = ComplexVector.Dot(vs[i], g);
+                    Complex dot = ComplexVector.Dot(g, vs[i]);
 
                     // rare case: a vector existed that was orthogonal to the selected vector
                     if (Complex.IsZero(dot) && !ComplexVector.IsZero(vs[i])) {
