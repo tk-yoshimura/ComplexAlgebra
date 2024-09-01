@@ -86,13 +86,9 @@ namespace ComplexAlgebraTests {
         public void SVDTest() {
             for (int rows = 1; rows <= 8; rows++) {
                 for (int cols = 1; cols <= 8; cols++) {
-                    if (int.Abs(rows - cols) > 2) {
-                        continue;
-                    }
-
                     Console.WriteLine($"{rows}x{cols}");
 
-                    for (int i = 0; i < 4; i++) {
+                    for (int i = 0; i < 16; i++) {
                         ComplexMatrix m = TestCase.RandomMatrix(rows, cols);
 
                         Console.WriteLine(m);
