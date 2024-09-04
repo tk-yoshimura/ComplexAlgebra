@@ -17,7 +17,7 @@ namespace ComplexAlgebra {
                 return SortEigenByNorm(EigenValues2x2(m));
             }
 
-            precision_level = precision_level >= 0 ? precision_level : 4 * m.Size * 8;
+            precision_level = precision_level >= 0 ? precision_level : 32 * m.Size;
 
             int n = m.Size, notconverged = n;
             int exponent = m.MaxExponent;
@@ -33,10 +33,7 @@ namespace ComplexAlgebra {
 
             for (int iter_qr = 0; iter_qr <= precision_level; iter_qr++) {
                 if (d.Size > 2) {
-                    Complex[] mu2x2 = EigenValues2x2(d[^2.., ^2..]);
-                    Complex d_kk = d[^1, ^1];
-                    Complex mu = (d_kk - mu2x2[0]).Norm < (d_kk - mu2x2[1]).Norm
-                        ? mu2x2[0] : mu2x2[1];
+                    Complex mu = EigenValues2x2(d[^2.., ^2..])[1];
 
                     (ComplexMatrix q, ComplexMatrix r) = QR(DiagonalAdd(d, -mu));
                     d = DiagonalAdd(r * q, mu);
@@ -96,12 +93,14 @@ namespace ComplexAlgebra {
                 return SortEigenByNorm(EigenValueVectors2x2(m));
             }
 
-            precision_level = precision_level >= 0 ? precision_level : 4 * m.Size * 8;
+            precision_level = precision_level >= 0 ? precision_level : 32 * m.Size;
 
             int n = m.Size, notconverged = n;
             int exponent = m.MaxExponent;
             ComplexMatrix u = ScaleB(m, -exponent);
-            ddouble eps = ddouble.Ldexp(1, -74);
+
+            ComplexVector diagonal = u.Diagonals;
+            bool[] diagonal_sampled = new bool[n];
 
             ComplexVector eigen_values = ComplexVector.Fill(n, 1);
             ComplexVector eigen_values_prev = eigen_values.Copy();
@@ -115,10 +114,7 @@ namespace ComplexAlgebra {
 
             for (int iter_qr = 0; iter_qr <= precision_level; iter_qr++) {
                 if (d.Size > 2) {
-                    Complex[] mu2x2 = EigenValues2x2(d[^2.., ^2..]);
-                    Complex d_kk = d[^1, ^1];
-                    Complex mu = (d_kk - mu2x2[0]).Norm < (d_kk - mu2x2[1]).Norm
-                        ? mu2x2[0] : mu2x2[1];
+                    Complex mu = EigenValues2x2(d[^2.., ^2..])[1];
 
                     (ComplexMatrix q, ComplexMatrix r) = QR(DiagonalAdd(d, -mu));
                     d = DiagonalAdd(r * q, mu);
@@ -142,22 +138,55 @@ namespace ComplexAlgebra {
                     }
 
                     Complex eigen_val = eigen_values[i];
-                    ComplexMatrix g = DiagonalAdd(u, -eigen_val + eps).Inverse;
 
-                    ddouble norm, norm_prev = ddouble.NaN;
-                    ComplexVector x = ComplexVector.Fill(n, 0.125);
-                    x[i] = Complex.One;
+                    int nearest_diagonal_index = eigen_val == diagonal[i] && !diagonal_sampled[i]
+                        ? i
+                        : diagonal
+                            .Where(v => !diagonal_sampled[v.index])
+                            .OrderBy(v => (v.val - eigen_val).Norm)
+                            .First().index;
 
-                    for (int iter_vector = 0; iter_vector < precision_level; iter_vector++) {
-                        x = (g * x).Normal;
+                    diagonal_sampled[nearest_diagonal_index] = true;
 
-                        norm = (u * x - eigen_val * x).Norm;
-
-                        if (ddouble.ILogB(norm) < -53 && norm >= norm_prev) {
-                            break;
+                    ComplexVector v = u[.., nearest_diagonal_index], h = u[nearest_diagonal_index, ..];
+                    ddouble nondiagonal_absmax = 0d;
+                    for (int k = 0; k < v.Dim; k++) {
+                        if (k == nearest_diagonal_index) {
+                            continue;
                         }
 
-                        norm_prev = norm;
+                        nondiagonal_absmax =
+                            ddouble.Max(nondiagonal_absmax, ddouble.Abs(v[k].R), ddouble.Abs(h[k].R));
+                        nondiagonal_absmax =
+                            ddouble.Max(nondiagonal_absmax, ddouble.Abs(v[k].I), ddouble.Abs(h[k].I));
+                    }
+
+                    ddouble eps = ddouble.Ldexp(nondiagonal_absmax, -74);
+
+                    ComplexMatrix g = DiagonalAdd(u, -eigen_val + eps).Inverse;
+
+                    ComplexVector x;
+
+                    if (IsFinite(g)) {
+                        ddouble norm, norm_prev = ddouble.NaN;
+                        x = ComplexVector.Fill(n, 0.125);
+                        x[i] = Complex.One;
+
+                        for (int iter_vector = 0; iter_vector < precision_level; iter_vector++) {
+                            x = (g * x).Normal;
+
+                            norm = (u * x - eigen_val * x).Norm;
+
+                            if (ddouble.ILogB(norm) < -53 && norm >= norm_prev) {
+                                break;
+                            }
+
+                            norm_prev = norm;
+                        }
+                    }
+                    else {
+                        x = ComplexVector.Zero(n);
+                        x[nearest_diagonal_index] = 1d;
                     }
 
                     eigen_vectors[i] = x;
@@ -189,51 +218,64 @@ namespace ComplexAlgebra {
         private static Complex[] EigenValues2x2(ComplexMatrix m) {
             Debug.Assert(m.Size == 2);
 
-            Complex b = m[0, 0] + m[1, 1], c = m[0, 0] - m[1, 1];
+            Complex m00 = m[0, 0], m11 = m[1, 1];
+            Complex m01 = m[0, 1], m10 = m[1, 0];
 
-            Complex d = Complex.Sqrt(c * c + 4 * m[0, 1] * m[1, 0]);
+            Complex b = m00 + m11, c = m00 - m11;
+
+            Complex d = Complex.Sqrt(c * c + 4d * m01 * m10);
 
             Complex val0 = (b + d) / 2;
             Complex val1 = (b - d) / 2;
 
-            return [val0, val1];
+            if ((val0 - m11).Norm >= (val1 - m11).Norm) {
+                return [val0, val1];
+            }
+            else {
+                return [val1, val0];
+            }
         }
 
         private static (Complex[] eigen_values, ComplexVector[] eigen_vectors) EigenValueVectors2x2(ComplexMatrix m) {
             Debug.Assert(m.Size == 2);
 
+            Complex m00 = m[0, 0], m11 = m[1, 1];
+            Complex m01 = m[0, 1], m10 = m[1, 0];
+
             long diagonal_scale = long.Max(
-                long.Max(ddouble.ILogB(m[0, 0].R), ddouble.ILogB(m[0, 0].I)),
-                long.Max(ddouble.ILogB(m[1, 1].R), ddouble.ILogB(m[1, 1].I))
+                long.Max(ddouble.ILogB(m00.R), ddouble.ILogB(m00.I)),
+                long.Max(ddouble.ILogB(m11.R), ddouble.ILogB(m11.I))
             );
 
-            long m10_scale = long.Max(ddouble.ILogB(m[1, 0].R), ddouble.ILogB(m[1, 0].I));
+            long m10_scale = long.Max(ddouble.ILogB(m10.R), ddouble.ILogB(m10.I));
 
             if (diagonal_scale - m10_scale < 106L) {
-                Complex b = m[0, 0] + m[1, 1], c = m[0, 0] - m[1, 1];
+                Complex b = m00 + m11, c = m00 - m11;
 
-                Complex d = Complex.Sqrt(c * c + 4 * m[0, 1] * m[1, 0]);
+                Complex d = Complex.Sqrt(c * c + 4 * m01 * m10);
 
                 Complex val0 = (b + d) / 2;
                 Complex val1 = (b - d) / 2;
 
-                ComplexVector vec0 = new ComplexVector((c + d) / (2 * m[1, 0]), 1).Normal;
-                ComplexVector vec1 = new ComplexVector((c - d) / (2 * m[1, 0]), 1).Normal;
+                ComplexVector vec0 = new ComplexVector((c + d) / (2 * m10), 1).Normal;
+                ComplexVector vec1 = new ComplexVector((c - d) / (2 * m10), 1).Normal;
 
-                return (new Complex[] { val0, val1 }, new ComplexVector[] { vec0, vec1 });
-            }
-            else {
-                Complex val0 = m[0, 0];
-                Complex val1 = m[1, 1];
-
-                if (val0 != val1) {
-                    ComplexVector vec0 = (1, 0);
-                    ComplexVector vec1 = new ComplexVector(m[0, 1] / (val1 - val0), 1).Normal;
-
+                if ((val0 - m11).Norm >= (val1 - m11).Norm) {
                     return (new Complex[] { val0, val1 }, new ComplexVector[] { vec0, vec1 });
                 }
                 else {
-                    return (new Complex[] { val0, val1 }, new ComplexVector[] { (1, 0), (0, 1) });
+                    return (new Complex[] { val1, val0 }, new ComplexVector[] { vec1, vec0 });
+                }
+            }
+            else {
+                if (m00 != m11) {
+                    ComplexVector vec0 = (1, 0);
+                    ComplexVector vec1 = new ComplexVector(m01 / (m11 - m00), 1).Normal;
+
+                    return (new Complex[] { m00, m11 }, new ComplexVector[] { vec0, vec1 });
+                }
+                else {
+                    return (new Complex[] { m00, m11 }, new ComplexVector[] { (1, 0), (0, 1) });
                 }
             }
         }
