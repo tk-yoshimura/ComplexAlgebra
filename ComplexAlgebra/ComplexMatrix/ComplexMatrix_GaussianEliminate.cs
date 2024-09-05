@@ -42,7 +42,7 @@ namespace ComplexAlgebra {
             ) / (ddouble.Ldexp(det.R, exponent), ddouble.Ldexp(det.I, exponent));
         }
 
-        public static ComplexMatrix GaussianEliminate(ComplexMatrix m) {
+        private static ComplexMatrix GaussianEliminate(ComplexMatrix m) {
             if (!IsSquare(m)) {
                 throw new ArgumentException("not square matrix", nameof(m));
             }
