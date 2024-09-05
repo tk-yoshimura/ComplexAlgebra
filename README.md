@@ -1,5 +1,5 @@
 # ComplexAlgebra
- Complex Algebra Implements 
+ Complex Algebra Implements
 
 ## Requirement
 .NET 8.0  
