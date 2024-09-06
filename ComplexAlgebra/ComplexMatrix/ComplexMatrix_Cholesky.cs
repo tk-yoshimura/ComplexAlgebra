@@ -1,4 +1,6 @@
-﻿using DoubleDoubleComplex;
+﻿using Algebra;
+using DoubleDouble;
+using DoubleDoubleComplex;
 
 namespace ComplexAlgebra {
     public partial class ComplexMatrix {
@@ -46,6 +48,107 @@ namespace ComplexAlgebra {
             ComplexMatrix l = ScaleB(new ComplexMatrix(v, cloning: false), exponent / 2);
 
             return l;
+        }
+
+        public static ComplexMatrix InversePositiveSymmetric(ComplexMatrix m, bool enable_check_hermitian = true) {
+            if (!IsSquare(m)) {
+                throw new ArgumentException("not square matrix", nameof(m));
+            }
+
+            int n = m.Size;
+
+            if (!IsFinite(m)) {
+                return Invalid(n, n);
+            }
+
+            ComplexMatrix l = Cholesky(m, enable_check_hermitian);
+
+            if (!IsFinite(l)) {
+                return Invalid(n);
+            }
+
+            ComplexMatrix v = Identity(n);
+
+            for (int i = 0; i < n; i++) {
+                Complex inv_mii = 1d / l.e[i, i];
+                for (int j = 0; j < n; j++) {
+                    v.e[i, j] *= inv_mii;
+                }
+
+                for (int j = i + 1; j < n; j++) {
+                    Complex mul = l.e[j, i];
+                    for (int k = 0; k < n; k++) {
+                        v.e[j, k] -= v.e[i, k] * mul;
+                    }
+                }
+            }
+
+            Complex[,] ret = new Complex[n, n];
+            v = v.T;
+
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j <= i; j++) {
+                    Complex s = 0d;
+
+                    for (int k = i; k < n; k++) {
+                        s += Complex.Conjugate(v.e[i, k]) * v.e[j, k];
+                    }
+
+                    if (i != j) {
+                        ret[i, j] = s;
+                        ret[j, i] = Complex.Conjugate(s);
+                    }
+                    else {
+                        ret[i, i] = s.R;
+                    }
+                }
+            }
+
+            ComplexMatrix w = new(ret, cloning: false);
+
+            return w;
+        }
+
+        public static ComplexVector SolvePositiveSymmetric(ComplexMatrix m, ComplexVector v, bool enable_check_hermitian = true) {
+            if (!IsSquare(m) || m.Size != v.Dim) {
+                throw new ArgumentException("invalid size", $"{nameof(m)}, {nameof(v)}");
+            }
+
+            int n = m.Size;
+
+            if (!IsFinite(m)) {
+                return ComplexVector.Invalid(n);
+            }
+
+            ComplexMatrix l = Cholesky(m, enable_check_hermitian);
+
+            if (!IsFinite(l)) {
+                return ComplexVector.Invalid(n);
+            }
+
+            v = v.Copy();
+
+            for (int i = 0; i < n; i++) {
+                Complex inv_mii = 1d / l.e[i, i];
+                v[i] *= inv_mii;
+
+                for (int j = i + 1; j < n; j++) {
+                    Complex mul = l.e[j, i];
+                    v[j] -= v[i] * mul;
+                }
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+                Complex inv_mii = 1d / Complex.Conjugate(l.e[i, i]);
+                v[i] *= inv_mii;
+
+                for (int j = i - 1; j >= 0; j--) {
+                    Complex mul = Complex.Conjugate(l.e[i, j]);
+                    v[j] -= v[i] * mul;
+                }
+            }
+
+            return v;
         }
     }
 }

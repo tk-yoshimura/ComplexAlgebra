@@ -213,6 +213,25 @@ namespace ComplexAlgebraTests {
         }
 
         [TestMethod]
+        public void InvertNxMTest() {
+            for (int n = 1; n <= 16; n++) {
+                for (int m = 1; m <= 16; m++) {
+                    for (int i = 0; i < 4; i++) {
+                        ComplexMatrix matrix = TestCase.RandomMatrix(n, m);
+
+                        ComplexMatrix r = matrix.Inverse;
+
+                        ComplexMatrix k = matrix * r * matrix;
+
+                        Console.WriteLine(k);
+
+                        Assert.IsTrue((k - matrix).Norm < 1e-27);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
         public void PseudoInvertTest() {
             for (int n = 2; n <= 16; n++) {
                 for (int i = 0; i < 16; i++) {

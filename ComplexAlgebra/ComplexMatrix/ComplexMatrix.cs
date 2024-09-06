@@ -184,12 +184,12 @@ namespace ComplexAlgebra {
                 return GaussianEliminate(m);
             }
             else if (m.Rows < m.Columns) {
-                ComplexMatrix mt = m.T, mr = m * mt;
-                return mt * mr.Inverse;
+                ComplexMatrix mh = m.H, mr = m * mh;
+                return mh * InversePositiveSymmetric(mr, enable_check_hermitian: false);
             }
             else {
-                ComplexMatrix mt = m.T, mr = m.T * m;
-                return mr.Inverse * mt;
+                ComplexMatrix mh = m.H, mr = mh * m;
+                return InversePositiveSymmetric(mr, enable_check_hermitian: false) * mh;
             }
         }
 
