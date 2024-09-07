@@ -47,7 +47,7 @@ namespace ComplexAlgebra {
                 ComplexMatrix h = Identity(n);
                 for (int i = k; i < n; i++) {
                     for (int j = k; j < n; j++) {
-                        h.e[i, j] -= c * u[i] * Complex.Conjugate(u[j]);
+                        h.e[i, j] -= c * u[i] * u[j].Conj;
                     }
                 }
 

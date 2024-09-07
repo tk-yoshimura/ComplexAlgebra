@@ -193,7 +193,7 @@ namespace ComplexAlgebra {
             Complex sum = Complex.Zero;
 
             for (int i = 0, dim = vector1.Dim; i < dim; i++) {
-                sum += vector1.v[i] * Complex.Conjugate(vector2.v[i]);
+                sum += vector1.v[i] * vector2.v[i].Conj;
             }
 
             return sum;

@@ -21,14 +21,14 @@ namespace ComplexAlgebraTests {
         }
 
         [TestMethod()]
-        public void InversePositiveSymmetric() {
+        public void InversePositiveHermitianTest() {
             for (int n = 1; n <= 16; n++) {
                 for (int i = 0; i < 16; i++) {
                     ComplexMatrix m = TestCase.RandomMatrix(n, n);
                     ComplexMatrix matrix = m * m.H;
                     Console.WriteLine($"test: {matrix}");
 
-                    ComplexMatrix r = ComplexMatrix.InversePositiveSymmetric(matrix);
+                    ComplexMatrix r = ComplexMatrix.InversePositiveHermitian(matrix);
 
                     Assert.IsTrue((matrix * r - ComplexMatrix.Identity(matrix.Size)).Norm < 1e-25);
                 }
@@ -36,7 +36,7 @@ namespace ComplexAlgebraTests {
         }
 
         [TestMethod()]
-        public void SlovePositiveSymmetric() {
+        public void SlovePositiveHermitianTest() {
             for (int n = 1; n <= 16; n++) {
                 for (int i = 0; i < 16; i++) {
                     ComplexMatrix m = TestCase.RandomMatrix(n, n);
@@ -49,9 +49,9 @@ namespace ComplexAlgebraTests {
                         v[j] = (j + 2, -j + 3);
                     }
 
-                    ComplexMatrix r = ComplexMatrix.InversePositiveSymmetric(matrix);
+                    ComplexMatrix r = ComplexMatrix.InversePositiveHermitian(matrix);
 
-                    ComplexVector u = ComplexMatrix.SolvePositiveSymmetric(matrix, v);
+                    ComplexVector u = ComplexMatrix.SolvePositiveHermitian(matrix, v);
                     ComplexVector t = r * v;
 
                     Assert.IsTrue((t - u).Norm < 1e-25);

@@ -129,7 +129,7 @@ namespace ComplexAlgebra {
             Complex[] ret = new Complex[v.Dim], e = v.v;
 
             for (int i = 0; i < ret.Length; i++) {
-                ret[i] = Complex.Conjugate(e[i]);
+                ret[i] = e[i].Conj;
             }
 
             return new ComplexVector(ret, cloning: false);

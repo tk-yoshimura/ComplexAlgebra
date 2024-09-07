@@ -126,7 +126,7 @@ namespace ComplexAlgebra {
 
             for (int i = 0; i < ret.GetLength(0); i++) {
                 for (int j = 0; j < ret.GetLength(1); j++) {
-                    ret[i, j] = Complex.Conjugate(e[i, j]);
+                    ret[i, j] = e[i, j].Conj;
                 }
             }
 
@@ -156,7 +156,7 @@ namespace ComplexAlgebra {
 
             for (int i = 0; i < m.Rows; i++) {
                 for (int j = 0; j < m.Columns; j++) {
-                    ret.e[j, i] = Complex.Conjugate(m.e[i, j]);
+                    ret.e[j, i] = m.e[i, j].Conj;
                 }
             }
 
@@ -185,11 +185,11 @@ namespace ComplexAlgebra {
             }
             else if (m.Rows < m.Columns) {
                 ComplexMatrix mh = m.H, mr = m * mh;
-                return mh * InversePositiveSymmetric(mr, enable_check_hermitian: false);
+                return mh * InversePositiveHermitian(mr, enable_check_hermitian: false);
             }
             else {
                 ComplexMatrix mh = m.H, mr = mh * m;
-                return InversePositiveSymmetric(mr, enable_check_hermitian: false) * mh;
+                return InversePositiveHermitian(mr, enable_check_hermitian: false) * mh;
             }
         }
 
@@ -454,7 +454,7 @@ namespace ComplexAlgebra {
 
             for (int i = 0; i < matrix.Rows; i++) {
                 for (int j = i; j < matrix.Columns; j++) {
-                    if (matrix.e[i, j] != Complex.Conjugate(matrix.e[j, i])) {
+                    if (matrix.e[i, j] != matrix.e[j, i].Conj) {
                         return false;
                     }
                 }

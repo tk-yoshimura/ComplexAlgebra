@@ -29,14 +29,14 @@ namespace ComplexAlgebra {
                 for (int j = 0; j < i; j++) {
                     Complex v_ij = u[i, j];
                     for (int k = 0; k < j; k++) {
-                        v_ij -= v[i, k] * Complex.Conjugate(v[j, k]);
+                        v_ij -= v[i, k] * v[j, k].Conj;
                     }
                     v[i, j] = v_ij / v[j, j]; 
                 }
 
                 Complex v_ii = u[i, i];
                 for (int k = 0; k < i; k++) {
-                    v_ii -= v[i, k] * Complex.Conjugate(v[i, k]);
+                    v_ii -= v[i, k] * v[i, k].Conj;
                 }
                 v[i, i] = Complex.Sqrt(v_ii);
 
@@ -50,7 +50,7 @@ namespace ComplexAlgebra {
             return l;
         }
 
-        public static ComplexMatrix InversePositiveSymmetric(ComplexMatrix m, bool enable_check_hermitian = true) {
+        public static ComplexMatrix InversePositiveHermitian(ComplexMatrix m, bool enable_check_hermitian = true) {
             if (!IsSquare(m)) {
                 throw new ArgumentException("not square matrix", nameof(m));
             }
@@ -91,12 +91,12 @@ namespace ComplexAlgebra {
                     Complex s = 0d;
 
                     for (int k = i; k < n; k++) {
-                        s += Complex.Conjugate(v.e[i, k]) * v.e[j, k];
+                        s += v.e[i, k].Conj * v.e[j, k];
                     }
 
                     if (i != j) {
                         ret[i, j] = s;
-                        ret[j, i] = Complex.Conjugate(s);
+                        ret[j, i] = s.Conj;
                     }
                     else {
                         ret[i, i] = s.R;
@@ -109,7 +109,7 @@ namespace ComplexAlgebra {
             return w;
         }
 
-        public static ComplexVector SolvePositiveSymmetric(ComplexMatrix m, ComplexVector v, bool enable_check_hermitian = true) {
+        public static ComplexVector SolvePositiveHermitian(ComplexMatrix m, ComplexVector v, bool enable_check_hermitian = true) {
             if (!IsSquare(m) || m.Size != v.Dim) {
                 throw new ArgumentException("invalid size", $"{nameof(m)}, {nameof(v)}");
             }
@@ -139,11 +139,11 @@ namespace ComplexAlgebra {
             }
 
             for (int i = n - 1; i >= 0; i--) {
-                Complex inv_mii = 1d / Complex.Conjugate(l.e[i, i]);
+                Complex inv_mii = 1d / l.e[i, i].Conj;
                 v[i] *= inv_mii;
 
                 for (int j = i - 1; j >= 0; j--) {
-                    Complex mul = Complex.Conjugate(l.e[i, j]);
+                    Complex mul = l.e[i, j].Conj;
                     v[j] -= v[i] * mul;
                 }
             }
