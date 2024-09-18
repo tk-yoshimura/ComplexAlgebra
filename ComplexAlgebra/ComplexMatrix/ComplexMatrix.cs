@@ -238,12 +238,7 @@ namespace ComplexAlgebra {
 
                 for (int i = 0; i < Rows; i++) {
                     for (int j = 0; j < Columns; j++) {
-                        if (ddouble.IsFinite(e[i, j].R)) {
-                            max_exponent = Math.Max(ddouble.ILogB(e[i, j].R), max_exponent);
-                        }
-                        if (ddouble.IsFinite(e[i, j].I)) {
-                            max_exponent = Math.Max(ddouble.ILogB(e[i, j].I), max_exponent);
-                        }
+                        max_exponent = Math.Max(Complex.ILogB(e[i, j]), max_exponent);    
                     }
                 }
 
@@ -256,7 +251,7 @@ namespace ComplexAlgebra {
 
             for (int i = 0; i < ret.Rows; i++) {
                 for (int j = 0; j < ret.Columns; j++) {
-                    ret.e[i, j] = (ddouble.Ldexp(ret.e[i, j].R, n), ddouble.Ldexp(ret.e[i, j].I, n));
+                    ret.e[i, j] = Complex.Ldexp(ret.e[i, j], n);
                 }
             }
 

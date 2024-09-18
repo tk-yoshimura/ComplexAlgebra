@@ -67,7 +67,7 @@ namespace ComplexAlgebra {
                     ComplexVector lower = d[^1, ..^1];
                     Complex eigen = d[^1, ^1];
 
-                    if (lower.MaxExponent < long.Max(ddouble.ILogB(eigen.R), ddouble.ILogB(eigen.I)) - 106L) {
+                    if (lower.MaxExponent < Complex.ILogB(eigen) - 106L) {
                         d = d[..^1, ..^1];
                     }
                 }
@@ -201,7 +201,7 @@ namespace ComplexAlgebra {
                     ComplexVector lower = d[^1, ..^1];
                     Complex eigen = d[^1, ^1];
 
-                    if (lower.MaxExponent < long.Max(ddouble.ILogB(eigen.R), ddouble.ILogB(eigen.I)) - 106L) {
+                    if (lower.MaxExponent < Complex.ILogB(eigen) - 106L) {
                         d = d[..^1, ..^1];
                     }
                 }
@@ -242,12 +242,9 @@ namespace ComplexAlgebra {
             Complex m00 = m[0, 0], m11 = m[1, 1];
             Complex m01 = m[0, 1], m10 = m[1, 0];
 
-            long diagonal_scale = long.Max(
-                long.Max(ddouble.ILogB(m00.R), ddouble.ILogB(m00.I)),
-                long.Max(ddouble.ILogB(m11.R), ddouble.ILogB(m11.I))
-            );
+            long diagonal_scale = long.Max(Complex.ILogB(m00), Complex.ILogB(m11));
 
-            long m10_scale = long.Max(ddouble.ILogB(m10.R), ddouble.ILogB(m10.I));
+            long m10_scale = Complex.ILogB(m10);
 
             if (diagonal_scale - m10_scale < 106L) {
                 Complex b = m00 + m11, c = m00 - m11;

@@ -18,8 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="TYoshimura.Algebra" Version="2.2.2" />
-    <PackageReference Include="TYoshimura.DoubleDouble" Version="3.2.6" />
-    <PackageReference Include="TYoshimura.DoubleDouble.Complex" Version="1.4.7" />
+    <PackageReference Include="TYoshimura.DoubleDouble" Version="3.2.8" />
+    <PackageReference Include="TYoshimura.DoubleDouble.Complex" Version="1.4.9" />
   </ItemGroup>
 
 </Project>

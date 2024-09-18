@@ -17,7 +17,7 @@ namespace ComplexAlgebra {
                     { m.e[1, 1], -m.e[0, 1] },
                     { -m.e[1, 0], m.e[0, 0] }
                 }, cloning: false
-            ) / (ddouble.Ldexp(det.R, exponent), ddouble.Ldexp(det.I, exponent));
+            ) / Complex.Ldexp(det, exponent);
         }
 
         private static ComplexMatrix Invert3x3(ComplexMatrix m) {
@@ -39,7 +39,7 @@ namespace ComplexAlgebra {
                       m.e[0, 1] * m.e[2, 0] - m.e[0, 0] * m.e[2, 1],
                       m.e[0, 0] * m.e[1, 1] - m.e[0, 1] * m.e[1, 0] }
                 }, cloning: false
-            ) / (ddouble.Ldexp(det.R, exponent), ddouble.Ldexp(det.I, exponent));
+            ) / Complex.Ldexp(det, exponent);
         }
 
         private static ComplexMatrix GaussianEliminate(ComplexMatrix m) {
