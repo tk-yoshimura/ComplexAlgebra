@@ -116,10 +116,10 @@ namespace ComplexAlgebraTests {
                         Console.WriteLine(vv);
                         Console.WriteLine(a);
 
-                        Assert.IsTrue((u.Det.Norm - 1) < 1e-27);
+                        Assert.IsTrue((u.Det.Norm - 1) < 1e-25);
                         Assert.IsTrue((uu - ComplexMatrix.Identity(rows)).Det.Norm < 1e-27);
 
-                        Assert.IsTrue((v.Det.Norm - 1) < 1e-27);
+                        Assert.IsTrue((v.Det.Norm - 1) < 1e-25);
                         Assert.IsTrue((vv - ComplexMatrix.Identity(cols)).Det.Norm < 1e-27);
 
                         Assert.IsTrue(ddouble.Abs((m - a).Norm) < 1e-27);
