@@ -1,5 +1,4 @@
-﻿using Algebra;
-using ComplexAlgebra;
+﻿using ComplexAlgebra;
 
 namespace ComplexAlgebraTests {
     public partial class ComplexMatrixTests {
