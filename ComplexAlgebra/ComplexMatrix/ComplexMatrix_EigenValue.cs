@@ -216,8 +216,8 @@ namespace ComplexAlgebra {
 
             Complex d = Complex.Sqrt(c * c + 4d * m01 * m10);
 
-            Complex val0 = (b + d) / 2;
-            Complex val1 = (b - d) / 2;
+            Complex val0 = (b + d) * 0.5d;
+            Complex val1 = (b - d) * 0.5d;
 
             if ((val0 - m11).Norm >= (val1 - m11).Norm) {
                 return [val0, val1];
