@@ -86,6 +86,9 @@ namespace ComplexAlgebra {
                 throw new ArgumentException("not square matrix", nameof(m));
             }
 
+            if (IsZero(m)) {
+                return (ComplexVector.Zero(m.Size), Identity(m.Size).Horizontals);
+            }
             if (m.Size <= 1) {
                 return ([m[0, 0]], [new ComplexVector(1)]);
             }
@@ -231,19 +234,25 @@ namespace ComplexAlgebra {
             Complex m01 = m[0, 1], m10 = m[1, 0];
 
             long diagonal_scale = long.Max(Complex.ILogB(m00), Complex.ILogB(m11));
+            long nondiagonal_scale = long.Max(Complex.ILogB(m01), Complex.ILogB(m10));
 
-            long m10_scale = Complex.ILogB(m10);
-
-            if (diagonal_scale - m10_scale < 106L) {
+            if (diagonal_scale - nondiagonal_scale < 106L) {
                 Complex b = m00 + m11, c = m00 - m11;
 
-                Complex d = Complex.Sqrt(c * c + 4 * m01 * m10);
+                Complex d = Complex.Sqrt(c * c + 4d * m01 * m10);
 
-                Complex val0 = (b + d) / 2;
-                Complex val1 = (b - d) / 2;
+                Complex val0 = (b + d) * 0.5d;
+                Complex val1 = (b - d) * 0.5d;
 
-                ComplexVector vec0 = new ComplexVector((c + d) / (2 * m10), 1).Normal;
-                ComplexVector vec1 = new ComplexVector((c - d) / (2 * m10), 1).Normal;
+                ComplexVector vec0, vec1;
+                if (m10.Magnitude > m01.Magnitude) {
+                    vec0 = new ComplexVector((c + d) / (2d * m10), 1d).Normal;
+                    vec1 = new ComplexVector((c - d) / (2d * m10), 1d).Normal;
+                }
+                else {
+                    vec0 = new ComplexVector(1d, (-c + d) / (2d * m01)).Normal;
+                    vec1 = new ComplexVector(1d, (-c - d) / (2d * m01)).Normal;
+                }
 
                 if ((val0 - m11).Norm >= (val1 - m11).Norm) {
                     return (new Complex[] { val0, val1 }, new ComplexVector[] { vec0, vec1 });
