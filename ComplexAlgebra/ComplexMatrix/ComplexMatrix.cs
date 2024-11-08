@@ -238,7 +238,7 @@ namespace ComplexAlgebra {
 
                 for (int i = 0; i < Rows; i++) {
                     for (int j = 0; j < Columns; j++) {
-                        max_exponent = Math.Max(Complex.ILogB(e[i, j]), max_exponent);
+                        max_exponent = int.Max(Complex.ILogB(e[i, j]), max_exponent);
                     }
                 }
 

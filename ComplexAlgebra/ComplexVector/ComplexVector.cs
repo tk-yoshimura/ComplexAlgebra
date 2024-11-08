@@ -213,7 +213,7 @@ namespace ComplexAlgebra {
                 int max_exponent = int.MinValue + 1; // abs(int.minvalue) throw arithmetic exception
 
                 for (int i = 0; i < Dim; i++) {
-                    max_exponent = Math.Max(Complex.ILogB(v[i]), max_exponent);
+                    max_exponent = int.Max(Complex.ILogB(v[i]), max_exponent);
                 }
 
                 return max_exponent;
