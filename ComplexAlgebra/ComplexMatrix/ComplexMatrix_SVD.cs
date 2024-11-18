@@ -71,7 +71,7 @@ namespace ComplexAlgebra {
             }
 
             while (vs.Count < n) {
-                ComplexVector g = init_vecs.OrderBy(u => vs.Select(v => ComplexVector.Dot(u, v).Norm).Sum()).First();
+                ComplexVector g = init_vecs.OrderBy(u => vs.Select(v => ComplexVector.Dot(u, v).SquareNorm).Sum()).First();
 
                 ComplexVector v = g;
 

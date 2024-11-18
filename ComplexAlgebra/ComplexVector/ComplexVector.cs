@@ -184,7 +184,7 @@ namespace ComplexAlgebra {
                 ddouble sum_sq = ddouble.Zero;
 
                 foreach (var vi in v) {
-                    sum_sq += vi.Norm;
+                    sum_sq += vi.SquareNorm;
                 }
 
                 return sum_sq;

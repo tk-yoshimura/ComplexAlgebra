@@ -26,7 +26,7 @@ namespace ComplexAlgebra {
             for (int k = 0; k < n - 1; k++) {
                 ddouble vsum = ddouble.Zero;
                 for (int i = k; i < n; i++) {
-                    vsum += r.e[i, k].Norm;
+                    vsum += r.e[i, k].SquareNorm;
                 }
                 ddouble vnorm = ddouble.Sqrt(vsum);
 
@@ -35,12 +35,12 @@ namespace ComplexAlgebra {
                 }
 
                 Complex x = r.e[k, k];
-                u.v[k] = Complex.IsZero(x) ? vnorm : (x + x / x.Magnitude * vnorm);
-                ddouble usum = u.v[k].Norm;
+                u.v[k] = Complex.IsZero(x) ? vnorm : (x + x / x.Norm * vnorm);
+                ddouble usum = u.v[k].SquareNorm;
 
                 for (int i = k + 1; i < n; i++) {
                     u.v[i] = r.e[i, k];
-                    usum += u.v[i].Norm;
+                    usum += u.v[i].SquareNorm;
                 }
                 ddouble c = 2 / usum;
 

@@ -15,6 +15,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("AD95853F-98E9-4A06-8F19-CE7D42398B83")]
 
-[assembly: AssemblyVersion("1.2.2.*")]
+[assembly: AssemblyVersion("1.3.0.*")]
 
 [assembly: InternalsVisibleTo("ComplexAlgebraTest")]

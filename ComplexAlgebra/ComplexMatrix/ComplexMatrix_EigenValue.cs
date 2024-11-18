@@ -45,7 +45,7 @@ namespace ComplexAlgebra {
                 }
 
                 for (int i = notconverged - 1; i >= 0; i--) {
-                    ddouble eigen_diffnorm = (eigen_values[i] - eigen_values_prev[i]).Norm;
+                    ddouble eigen_diffnorm = (eigen_values[i] - eigen_values_prev[i]).SquareNorm;
                     eigen_diffnorms[i] = eigen_diffnorm;
                 }
 
@@ -126,7 +126,7 @@ namespace ComplexAlgebra {
                 }
 
                 for (int i = notconverged - 1; i >= 0; i--) {
-                    ddouble eigen_diffnorm = (eigen_values[i] - eigen_values_prev[i]).Norm;
+                    ddouble eigen_diffnorm = (eigen_values[i] - eigen_values_prev[i]).SquareNorm;
                     eigen_diffnorms[i] = eigen_diffnorm;
                 }
 
@@ -219,7 +219,7 @@ namespace ComplexAlgebra {
             Complex val0 = (b + d) * 0.5d;
             Complex val1 = (b - d) * 0.5d;
 
-            if ((val0 - m11).Norm >= (val1 - m11).Norm) {
+            if ((val0 - m11).SquareNorm >= (val1 - m11).SquareNorm) {
                 return [val0, val1];
             }
             else {
@@ -245,7 +245,7 @@ namespace ComplexAlgebra {
                 Complex val1 = (b - d) * 0.5d;
 
                 ComplexVector vec0, vec1;
-                if (m10.Magnitude > m01.Magnitude) {
+                if (m10.SquareNorm > m01.SquareNorm) {
                     vec0 = new ComplexVector((c + d) / (2d * m10), 1d).Normal;
                     vec1 = new ComplexVector((c - d) / (2d * m10), 1d).Normal;
                 }
@@ -254,7 +254,7 @@ namespace ComplexAlgebra {
                     vec1 = new ComplexVector(1d, (-c - d) / (2d * m01)).Normal;
                 }
 
-                if ((val0 - m11).Norm >= (val1 - m11).Norm) {
+                if ((val0 - m11).SquareNorm >= (val1 - m11).SquareNorm) {
                     return (new Complex[] { val0, val1 }, new ComplexVector[] { vec0, vec1 });
                 }
                 else {
@@ -275,7 +275,7 @@ namespace ComplexAlgebra {
         }
 
         private static Complex[] SortEigenByNorm(Complex[] eigen_values) {
-            Complex[] eigen_values_sorted = [.. eigen_values.OrderByDescending(item => item.Norm)];
+            Complex[] eigen_values_sorted = [.. eigen_values.OrderByDescending(item => item.SquareNorm)];
 
             return eigen_values_sorted;
         }
@@ -284,7 +284,7 @@ namespace ComplexAlgebra {
             Debug.Assert(eigens.eigen_values.Length == eigens.eigen_vectors.Length);
 
             IOrderedEnumerable<(Complex val, ComplexVector vec)> eigens_sorted =
-                eigens.eigen_values.Zip(eigens.eigen_vectors).OrderByDescending(item => item.First.Norm);
+                eigens.eigen_values.Zip(eigens.eigen_vectors).OrderByDescending(item => item.First.SquareNorm);
 
             Complex[] eigen_values_sorted = eigens_sorted.Select(item => item.val).ToArray();
             ComplexVector[] eigen_vectors_sorted = eigens_sorted.Select(item => item.vec).ToArray();

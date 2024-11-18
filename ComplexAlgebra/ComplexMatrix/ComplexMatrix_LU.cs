@@ -27,12 +27,12 @@ namespace ComplexAlgebra {
             ComplexMatrix l = Zero(n), u = Zero(n);
 
             for (int i = 0; i < n; i++) {
-                ddouble pivot_abs = m.e[i, i].Norm;
+                ddouble pivot_abs = m.e[i, i].SquareNorm;
                 int r = i;
 
                 for (int j = i + 1; j < n; j++) {
-                    if (m.e[j, i].Norm > pivot_abs) {
-                        pivot_abs = m.e[j, i].Norm;
+                    if (m.e[j, i].SquareNorm > pivot_abs) {
+                        pivot_abs = m.e[j, i].SquareNorm;
                         r = j;
                     }
                 }
