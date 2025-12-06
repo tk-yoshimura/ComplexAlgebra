@@ -108,31 +108,31 @@ namespace ComplexAlgebraTests {
             Assert.AreEqual((ddouble)"4.1", matrix10[3, 5]);
             Assert.AreEqual(Complex.ImaginaryOne, matrix10[4, 2]);
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, matrix5x2, matrix7x2 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2 }, { matrix3x4 }, { matrix3x6 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, matrix5x2, matrix7x2 }, { matrix3x4, matrix5x4, matrix7x4 }, { matrix3x6, matrix5x6, matrix7x6 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2 }, { matrix5x4 }, { matrix7x2 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix5x2, matrix3x4, matrix3x6 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, matrix3x4, matrix3x6 }, { matrix5x2, matrix5x4, matrix5x6 }, { matrix7x2, matrix7x4, matrix7x4 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, 'b', matrix3x6 }, { matrix5x2, matrix5x4, matrix5x6 }, { matrix7x2, matrix7x4, matrix7x4 } });
             });
         }
@@ -316,31 +316,31 @@ namespace ComplexAlgebraTests {
             Assert.AreEqual((ddouble)4.2f, matrix10[3, 4]);
             Assert.AreEqual((ddouble)"4.1", matrix10[3, 5]);
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, matrix5x2, matrix7x2 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2 }, { matrix3x4 }, { matrix3x6 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, matrix5x2, matrix7x2 }, { matrix3x4, matrix5x4, matrix7x4 }, { matrix3x6, matrix5x6, matrix7x6 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2 }, { matrix5x4 }, { matrix7x2 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix5x2, matrix3x4, matrix3x6 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, matrix3x4, matrix3x6 }, { matrix5x2, matrix5x4, matrix5x6 }, { matrix7x2, matrix7x4, matrix7x4 } });
             });
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexMatrix.Concat(new object[,] { { matrix3x2, 'b', matrix3x6 }, { matrix5x2, matrix5x4, matrix5x6 }, { matrix7x2, matrix7x4, matrix7x4 } });
             });
         }

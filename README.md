@@ -2,7 +2,7 @@
  Complex Algebra Implements 
 
 ## Requirement
-.NET 8.0  
+.NET 10.0  
 AVX2 suppoted CPU. (Intel:Haswell(2013)-, AMD:Excavator(2015)-)  
 [DoubleDouble](https://github.com/tk-yoshimura/DoubleDouble)  
 [DoubleDoubleComplex](https://github.com/tk-yoshimura/DoubleDoubleComplex)  

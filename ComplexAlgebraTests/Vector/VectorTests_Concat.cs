@@ -21,7 +21,7 @@ namespace ComplexAlgebraTests {
             Assert.AreEqual(new ComplexVector(-1, -2, -2, 5, -3, -3, -3, -3), ComplexVector.Concat(vector1, vector2, 5f, vector4));
             Assert.AreEqual(new ComplexVector(-1, -2, -2, "6.2", -3, -3, -3, -3), ComplexVector.Concat(vector1, vector2, "6.2", vector4));
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexVector.Concat(vector1, vector2, 'b', vector4);
             });
         }
@@ -42,7 +42,7 @@ namespace ComplexAlgebraTests {
             Assert.AreEqual(new ComplexVector(-1, -2, -2, 5, -3, -3, -3, -3), ComplexVector.Concat(vector1, vector2, 5f, vector4));
             Assert.AreEqual(new ComplexVector(-1, -2, -2, "6.2", -3, -3, -3, -3), ComplexVector.Concat(vector1, vector2, "6.2", vector4));
 
-            Assert.ThrowsException<ArgumentException>(() => {
+            Assert.ThrowsExactly<ArgumentException>(() => {
                 ComplexVector.Concat(vector1, vector2, 'b', vector4);
             });
         }

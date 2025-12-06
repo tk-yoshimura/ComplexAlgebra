@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ComplexAlgebra")]
-[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2024")]
+[assembly: AssemblyCopyright("Copyright © T.Yoshimura 2024-2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -15,6 +15,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("AD95853F-98E9-4A06-8F19-CE7D42398B83")]
 
-[assembly: AssemblyVersion("1.3.0.*")]
+[assembly: AssemblyVersion("2.0.0.*")]
 
 [assembly: InternalsVisibleTo("ComplexAlgebraTest")]
